@@ -1,31 +1,30 @@
+// @ts-nocheck
+
 import React from "react";
 import decamelize from "decamelize";
-import { createTags } from "../../utils/helpers";
 import { IconContext } from "react-icons";
-import * as Fa from "react-icons/fa";
+import * as Hi from "react-icons/hi";
+import { createTags } from "../../utils/helpers";
 
 function convertFormat(name, options) {
-  //FORMAT REFERENCE: https://fontawesome.com/v5/cheatsheet/free/
+  //FORMAT REFERENCE https://github.com/tailwindlabs/heroicons
   if (options.outputFormat === "react") return name;
 
   const separator = "-";
-  const SPECIAL_NAMES = {
-    Draft2Digital: "draft2digital",
-    "500Px": "500px",
-  };
 
-  //Remove react icon prefixes/identifiers Fa/FaReg (regular)
-  name = name.replace(/^(FaReg|Fa)(.*$)/, "$2");
+  //Remove react icon prefixes/identifiers Hi
+  name = name.replace(/^(Hi)(.*$)/, "$2");
 
-  if (SPECIAL_NAMES[name]) return SPECIAL_NAMES[name];
+  //Separate letters followed by numbers (decamelize defaults to omitting separation of letter followed by number)
+  name = name.replace(/([a-z])([0-9])/i, `$1${separator}$2`);
 
-  return decamelize(name, {separator});
+  return decamelize(name, { separator });
 }
 
 export default function (provider) {
   return (options = {}) => {
-    const icons = Object.keys(Fa).map((name) => {
-      const Icon = Fa[name];
+    const icons = Object.keys(Hi).map((name) => {
+      const Icon = Hi[name];
       return {
         provider,
         name: convertFormat(name, options),

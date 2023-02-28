@@ -1,19 +1,9 @@
 {
-   "compilerOptions": {
-     "lib": ["dom", "dom.iterable", "esnext"],
-     "allowJs": true,
-     "skipLibCheck": true,
-     "strict": false,
-     "noEmit": true,
-     "esModuleInterop": true,
-     "module": "esnext",
-     "moduleResolution": "node",
-     "resolveJsonModule": true,
-     "isolatedModules": true,
-     "jsx": "preserve",
-     "incremental": true,
-     "outDir": "dist"
-   },
-   "exclude": ["node_modules"]
- }
- 
+  "extends": "./tsconfig.settings",
+  "include": ["./src", "./package.config.ts"],
+  "compilerOptions": {
+    "allowJs": true,
+    "rootDir": ".",
+    "noEmit": true
+  }
+}

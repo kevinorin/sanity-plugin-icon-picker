@@ -1,3 +1,5 @@
+// @ts-nocheck
+
 import React from "react";
 import decamelize from "decamelize";
 import { createTags } from "../../utils/helpers";
@@ -13,7 +15,7 @@ function convertFormat(name, options = {}) {
   //Separate letters followed by numbers (decamelize defaults to omitting separation of letter followed by number)
   name = name.replace(/([a-z])([0-9])/i, `$1${separator}$2`);
 
-  return decamelize(name, {separator});
+  return decamelize(name, { separator });
 }
 
 const iconStyle = { width: "20px", height: "20px", fontSize: "20px" };
