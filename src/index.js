@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+
 import {
   PatchEvent,
   setIfMissing,
@@ -121,4 +122,7 @@ const IconPicker = React.forwardRef((props, ref) => {
   );
 });
 
-export default IconPicker;
+export default v3IconPicker = {
+  name: 'sanity-v3-icon-picker',
+  title: 'Sanity v3 Icon Picker'
+}
