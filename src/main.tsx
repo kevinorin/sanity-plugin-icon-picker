@@ -1,21 +1,15 @@
-import React, { useState, useEffect } from "react";
+// @ts-nocheck
 
-import {
-  PatchEvent,
-  setIfMissing,
-  set,
-  unset,
-} from "part:@sanity/form-builder/patch-event";
+import React, { useCallback, useState, useEffect } from "react";
+import { set, unset } from "sanity";
+import { Card } from "@sanity/ui";
 
-import FormField from "part:@sanity/components/formfields/default";
 import Popup from "./components/Popup";
 import SearchBar from "./components/SearchBar";
 import SearchResults from "./components/SearchResults";
 import Tabs from "./components/Tabs";
 import Menu from "./components/Menu";
-
 import { getIcons } from "./utils/icons";
-import { Card } from "@sanity/ui";
 
 const LOADING_TIMER_MS = 400;
 
@@ -49,24 +43,25 @@ const IconPicker = React.forwardRef((props, ref) => {
   }, [query]);
 
   const unsetIcon = () => {
-    onChange(PatchEvent.from(unset()));
+    onChange(unset());
     setSelected(null);
   };
 
   const setIcon = (icon) => {
-    if (selected && icon.name === selected.name) return unsetIcon();
+    if (selected && icon.name === selected.name) {
+      return unsetIcon();
+    }
 
-    onChange(
-      PatchEvent.from([
-        setIfMissing({
-          _type: type.name,
-        }),
-        set(icon.provider, ["provider"]),
-        set(icon.name, ["name"]),
-      ])
-    );
-    setSelected(icon);
-  };
+    useCallback((_event) => {
+      onChange(() => {
+        set(icon.provider, ["provider"])
+        set(icon.name, ["name"])
+        // THIS LINE
+        set(type, type.name)
+      });
+      setSelected(icon);
+    })
+  }
 
   const openPopup = () => {
     setIsPopupOpen(true);
@@ -97,32 +92,27 @@ const IconPicker = React.forwardRef((props, ref) => {
   };
 
   return (
-    <FormField label={type.title} description={type.description}>
-      <Card ref={ref}>
-        <Menu
-          reference={ref}
-          onClick={handlePreviewClick}
-          selected={selected}
-        />
+    <Card ref={ref}>
+      <Menu
+        reference={ref}
+        onClick={handlePreviewClick}
+        selected={selected}
+      />
 
-        <Popup onClose={closePopup} isOpen={isPopupOpen}>
-          <SearchBar value={query} onChange={onQueryChange} />
-          <Tabs options={type.options} onClick={onTabClick}>
-            <SearchResults
-              results={queryResults}
-              selected={selected}
-              onSelect={setIcon}
-              loading={loading}
-              query={query}
-            />
-          </Tabs>
-        </Popup>
-      </Card>
-    </FormField>
+      <Popup onClose={closePopup} isOpen={isPopupOpen}>
+        <SearchBar value={query} onChange={onQueryChange} />
+        <Tabs options={type.options} onClick={onTabClick}>
+          <SearchResults
+            results={queryResults}
+            selected={selected}
+            onSelect={setIcon}
+            loading={loading}
+            query={query}
+          />
+        </Tabs>
+      </Popup>
+    </Card>
   );
 });
 
-export default v3IconPicker = {
-  name: 'sanity-v3-icon-picker',
-  title: 'Sanity v3 Icon Picker'
-}
+export default IconPicker;
